@@ -114,6 +114,15 @@
             0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
             50% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.75); }
         }
+        .highlight-prize {
+            background-color: #fbbf24 !important;
+            color: #07090e !important;
+            border-color: #fef08a !important;
+            box-shadow: 0 0 35px #fbbf24 !important;
+            transform: scale(1.12);
+            z-index: 99;
+            transition: all 0.4s ease;
+        }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
@@ -121,12 +130,13 @@
 </head>
 <body class="min-h-screen flex flex-col select-none antialiased">
 
+    <!-- HEADER WITH LOGO -->
     <header class="py-2.5 px-6 glass-panel border-b border-slate-800/80 flex items-center justify-between sticky top-0 z-40 shadow-xl">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center shadow-lg font-black text-slate-950 text-xl transform rotate-3 transition-transform duration-300 hover:rotate-6 hover:scale-105">?</div>
+            <img src="DTAS_logo_HTV7_2016.webp" alt="Đi Tìm Ân Số Logo" class="h-9 sm:h-11 object-contain drop-shadow-[0_0_10px_rgba(251,191,36,0.5)] transition-transform duration-300 hover:scale-105">
             <div>
-                <h1 class="text-lg sm:text-xl font-black tracking-wider text-amber-400 led-glow">ĐI TÌM ÂN SỐ</h1>
-                <p class="text-[9px] tracking-widest uppercase text-slate-400 font-semibold">Deal or No Deal Studio</p>
+                <h1 class="text-base sm:text-lg font-black tracking-wider text-amber-400 led-glow leading-none">ĐI TÌM ÂN SỐ</h1>
+                <p class="text-[9px] tracking-widest uppercase text-slate-400 font-semibold mt-1">Deal or No Deal Studio</p>
             </div>
         </div>
 
@@ -143,15 +153,16 @@
         </div>
     </header>
 
+    <!-- WELCOME SCREEN -->
     <div id="welcome-screen" class="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl z-50 flex items-center justify-center p-4 transition-all duration-500 ease-out">
         <div class="glass-panel-active rounded-3xl max-w-lg w-full p-8 text-center shadow-2xl relative overflow-hidden transform transition-all duration-500 scale-100">
             <div class="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div class="w-20 h-20 bg-gradient-to-tr from-amber-500 to-yellow-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl text-slate-950 text-4xl font-black transform rotate-6 transition-transform duration-500 hover:rotate-12">
-                🧰
+            <div class="mx-auto mb-5 max-w-[220px] flex items-center justify-center">
+                <img src="DTAS_logo_HTV7_2016.webp" alt="Đi Tìm Ân Số Logo" class="w-full h-auto object-contain drop-shadow-[0_0_20px_rgba(245,158,11,0.6)] transform hover:scale-105 transition-transform duration-500">
             </div>
-            <h2 class="text-3xl sm:text-4xl font-black text-amber-400 tracking-wide led-glow uppercase mb-2">ĐI TÌM ẨN SỐ</h2>
+
             <p class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">Trải nghiệm game show truyền hình đẳng cấp với 26 chiếc cặp bí ẩn, các cuộc gọi cân não từ Ngân hàng và phần thưởng lên đến 100.000.000!</p>
             
             <div class="mb-6 text-left">
@@ -203,7 +214,7 @@
                 <div class="text-center mb-3">
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Danh Sách 26 Chiếc Cặp Trên Sân Khấu</span>
                 </div>
-                <div class="grid grid-cols-6 sm:grid-cols-7 md:grid-cols-9 gap-3.5 w-full justify-center" id="cases-grid"></div>
+                <div class="flex flex-col items-center gap-3.5 w-full" id="cases-grid"></div>
             </div>
         </section>
 
@@ -266,7 +277,7 @@
             <p id="gameover-desc" class="text-xs sm:text-sm text-slate-300 mt-2">Trò chơi Đi Tìm Ân Số đã chính thức khép lại.</p>
             
             <div class="my-6 bg-slate-900/90 rounded-2xl p-5 border border-slate-800 shadow-inner">
-                <span class="text-[11px] text-slate-400 uppercase tracking-widest font-semibold block">Tiền Thưởng Nhận Được</span>
+                <span class="text-[11px] text-slate-400 uppercase tracking-widest font-semibold block">TIỀN THƯỞNG NHẬN ĐƯỢC</span>
                 <div id="final-prize-display" class="text-3xl sm:text-4xl font-black text-amber-400 mt-2 led-glow">0</div>
                 <div id="user-original-reveal-desc" class="text-xs text-slate-400 mt-3 font-medium">Chiếc cặp cá nhân của bạn chứa: ...</div>
             </div>
@@ -295,10 +306,13 @@
             currentRound: 0,
             casesOpenedThisRound: 0,
             currentBankerOffer: 0,
-            hasAcceptedDealBefore: false, // Lưu trạng thái đã từng chấp nhận deal hay chưa
+            acceptedDealAmount: null, // LƯU CỐ ĐỊNH TIỀN CHỐT DEAL VỚI NGÂN HÀNG
+            hasAcceptedDealBefore: false,
             audioEnabled: true,
             isLocked: false
         };
+
+        let highlightedPrizeVal = null;
 
         let audioCtx = null;
         function initAudioContext() {
@@ -307,41 +321,95 @@
             }
         }
 
-        function playSound(type) {
+        function playSound(type, amount = 0) {
             if (!gameState.audioEnabled) return;
             try {
                 initAudioContext();
                 if (!audioCtx) return;
                 const now = audioCtx.currentTime;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
 
                 if (type === 'click') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(350, now);
                     osc.frequency.exponentialRampToValueAtTime(700, now + 0.05);
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.linearRampToValueAtTime(0.005, now + 0.05);
                     osc.start(now);
                     osc.stop(now + 0.05);
                 } else if (type === 'open') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(180, now);
-                    osc.frequency.exponentialRampToValueAtTime(520, now + 0.35);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                    if (amount < 1000000) {
+                        const notes = [523.25, 659.25, 783.99];
+                        notes.forEach((freq, idx) => {
+                            const o = audioCtx.createOscillator();
+                            const g = audioCtx.createGain();
+                            o.connect(g);
+                            g.connect(audioCtx.destination);
+                            o.type = 'sine';
+                            o.frequency.setValueAtTime(freq, now + idx * 0.1);
+                            g.gain.setValueAtTime(0.08, now + idx * 0.1);
+                            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.3);
+                            o.start(now + idx * 0.1);
+                            o.stop(now + idx * 0.1 + 0.3);
+                        });
+                    } else if (amount >= 1000000 && amount < 10000000) {
+                        const notes = [329.63, 392.00];
+                        notes.forEach((freq, idx) => {
+                            const o = audioCtx.createOscillator();
+                            const g = audioCtx.createGain();
+                            o.connect(g);
+                            g.connect(audioCtx.destination);
+                            o.type = 'sine';
+                            o.frequency.setValueAtTime(freq, now + idx * 0.15);
+                            g.gain.setValueAtTime(0.09, now + idx * 0.15);
+                            g.gain.linearRampToValueAtTime(0.005, now + idx * 0.15 + 0.35);
+                            o.start(now + idx * 0.15);
+                            o.stop(now + idx * 0.15 + 0.35);
+                        });
+                    } else if (amount >= 10000000 && amount < 50000000) {
+                        const notes = [220.00, 261.63, 329.63];
+                        notes.forEach((freq, idx) => {
+                            const o = audioCtx.createOscillator();
+                            const g = audioCtx.createGain();
+                            o.connect(g);
+                            g.connect(audioCtx.destination);
+                            o.type = 'triangle';
+                            o.frequency.setValueAtTime(freq, now + idx * 0.12);
+                            g.gain.setValueAtTime(0.08, now + idx * 0.12);
+                            g.gain.exponentialRampToValueAtTime(0.002, now + idx * 0.12 + 0.4);
+                            o.start(now + idx * 0.12);
+                            o.stop(now + idx * 0.12 + 0.4);
+                        });
+                    } else {
+                        const notes = [174.61, 220.00, 261.63];
+                        notes.forEach((freq, idx) => {
+                            const o = audioCtx.createOscillator();
+                            const g = audioCtx.createGain();
+                            o.connect(g);
+                            g.connect(audioCtx.destination);
+                            o.type = 'sine';
+                            o.frequency.setValueAtTime(freq, now + idx * 0.15);
+                            g.gain.setValueAtTime(0.1, now + idx * 0.15);
+                            g.gain.linearRampToValueAtTime(0.001, now + idx * 0.15 + 0.5);
+                            o.start(now + idx * 0.15);
+                            o.stop(now + idx * 0.15 + 0.5);
+                        });
+                    }
+                } else if (type === 'banker') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(554.37, now + 0.15);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.005, now + 0.35);
                     osc.start(now);
                     osc.stop(now + 0.35);
-                } else if (type === 'banker') {
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(880, now);
-                    osc.frequency.setValueAtTime(1174.66, now + 0.12);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
                 } else if (type === 'win') {
                     const notes = [523.25, 659.25, 783.99, 1046.50];
                     notes.forEach((freq, idx) => {
@@ -351,8 +419,8 @@
                         g.connect(audioCtx.destination);
                         o.type = 'sine';
                         o.frequency.setValueAtTime(freq, now + idx * 0.15);
-                        g.gain.setValueAtTime(0.2, now + idx * 0.15);
-                        g.gain.linearRampToValueAtTime(0.01, now + idx * 0.15 + 0.4);
+                        g.gain.setValueAtTime(0.1, now + idx * 0.15);
+                        g.gain.linearRampToValueAtTime(0.005, now + idx * 0.15 + 0.4);
                         o.start(now + idx * 0.15);
                         o.stop(now + idx * 0.15 + 0.4);
                     });
@@ -399,8 +467,10 @@
             gameState.currentRound = 0;
             gameState.casesOpenedThisRound = 0;
             gameState.currentBankerOffer = 0;
+            gameState.acceptedDealAmount = null; // RESET BIẾN
             gameState.hasAcceptedDealBefore = false;
             gameState.isLocked = false;
+            highlightedPrizeVal = null;
 
             document.getElementById('banker-modal').classList.add('hidden');
             document.getElementById('gameover-modal').classList.add('hidden');
@@ -444,16 +514,40 @@
 
             blueAmounts.forEach(val => {
                 const opened = isAmountOpenedOrPersonal(val);
+                const isHighlighted = (val === highlightedPrizeVal);
                 const div = document.createElement('div');
-                div.className = `py-1 px-2 rounded-lg text-xs sm:text-sm font-black text-center transition-all duration-500 ${opened ? 'bg-slate-900/40 text-slate-600 line-through border border-slate-800 scale-95 opacity-50' : 'bg-cyan-950/70 text-cyan-300 border border-cyan-800/40 shadow-sm'}`;
+                div.id = `prize-item-${val}`;
+
+                let cssClasses = "py-1 px-2 rounded-lg text-xs sm:text-sm font-black text-center transition-all duration-300 ";
+                if (isHighlighted) {
+                    cssClasses += "highlight-prize";
+                } else if (opened) {
+                    cssClasses += "bg-slate-900/40 text-slate-600 line-through border border-slate-800 scale-95 opacity-50";
+                } else {
+                    cssClasses += "bg-cyan-950/70 text-cyan-300 border border-cyan-800/40 shadow-sm";
+                }
+
+                div.className = cssClasses;
                 div.innerText = formatMoney(val);
                 blueContainer.appendChild(div);
             });
 
             redAmounts.forEach(val => {
                 const opened = isAmountOpenedOrPersonal(val);
+                const isHighlighted = (val === highlightedPrizeVal);
                 const div = document.createElement('div');
-                div.className = `py-1 px-2 rounded-lg text-xs sm:text-sm font-black text-center transition-all duration-500 ${opened ? 'bg-slate-900/40 text-slate-600 line-through border border-slate-800 scale-95 opacity-50' : 'bg-rose-950/70 text-rose-400 border border-rose-800/40 shadow-sm'}`;
+                div.id = `prize-item-${val}`;
+
+                let cssClasses = "py-1 px-2 rounded-lg text-xs sm:text-sm font-black text-center transition-all duration-300 ";
+                if (isHighlighted) {
+                    cssClasses += "highlight-prize";
+                } else if (opened) {
+                    cssClasses += "bg-slate-900/40 text-slate-600 line-through border border-slate-800 scale-95 opacity-50";
+                } else {
+                    cssClasses += "bg-rose-950/70 text-rose-400 border border-rose-800/40 shadow-sm";
+                }
+
+                div.className = cssClasses;
                 div.innerText = formatMoney(val);
                 redContainer.appendChild(div);
             });
@@ -470,32 +564,44 @@
             const grid = document.getElementById('cases-grid');
             grid.innerHTML = '';
 
-            for (let i = 1; i <= 26; i++) {
-                const isOpened = gameState.openedCases.includes(i);
-                const isUserCase = gameState.userPersonalCase === i;
+            const rowLayout = [6, 7, 6, 7];
+            let caseNumber = 1;
 
-                const wrapper = document.createElement('div');
-                wrapper.className = `briefcase aspect-square rounded-xl relative ${isOpened ? 'opened' : ''} ${isUserCase ? 'user-personal' : ''}`;
-                
-                let innerHtml = `
-                    <div class="briefcase-inner">
-                        <div class="briefcase-front flex items-center justify-center relative">
-                            <span class="text-xl sm:text-2xl font-black ${isUserCase ? 'text-amber-200' : 'text-amber-400'}">${i}</span>
-                            ${isUserCase ? '<span class="absolute top-1 right-1 text-[8px] bg-amber-500 text-slate-950 font-black px-1 rounded">CỦA BẠN</span>' : ''}
-                        </div>
-                        <div class="briefcase-back flex flex-col items-center justify-center">
-                            <span class="text-[9px] text-slate-500 font-bold">${i}</span>
-                            <span class="text-[10px] sm:text-xs font-black text-slate-200 px-1">${formatMoney(gameState.cases[i])}</span>
-                        </div>
-                    </div>
-                `;
-                wrapper.innerHTML = innerHtml;
+            rowLayout.forEach((count) => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'flex justify-center gap-3 sm:gap-4 w-full';
 
-                if (!isOpened) {
-                    wrapper.onclick = () => handleCaseClick(i);
+                for (let j = 0; j < count; j++) {
+                    if (caseNumber > 26) break;
+                    const i = caseNumber;
+                    const isOpened = gameState.openedCases.includes(i);
+                    const isUserCase = gameState.userPersonalCase === i;
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `briefcase w-14 h-14 sm:w-16 sm:h-16 aspect-square rounded-2xl relative ${isOpened ? 'opened' : ''} ${isUserCase ? 'user-personal' : ''}`;
+                    
+                    let innerHtml = `
+                        <div class="briefcase-inner">
+                            <div class="briefcase-front flex items-center justify-center relative">
+                                <span class="text-lg sm:text-2xl font-black ${isUserCase ? 'text-amber-200' : 'text-amber-400'}">${i}</span>
+                                ${isUserCase ? '<span class="absolute top-1 right-1 text-[8px] bg-amber-500 text-slate-950 font-black px-1 rounded">CỦA BẠN</span>' : ''}
+                            </div>
+                            <div class="briefcase-back flex flex-col items-center justify-center">
+                                <span class="text-[9px] text-slate-500 font-bold">${i}</span>
+                                <span class="text-[10px] sm:text-xs font-black text-slate-200 px-1">${formatMoney(gameState.cases[i])}</span>
+                            </div>
+                        </div>
+                    `;
+                    wrapper.innerHTML = innerHtml;
+
+                    if (!isOpened) {
+                        wrapper.onclick = () => handleCaseClick(i);
+                    }
+                    rowDiv.appendChild(wrapper);
+                    caseNumber++;
                 }
-                grid.appendChild(wrapper);
-            }
+                grid.appendChild(rowDiv);
+            });
         }
 
         function renderUserPersonalCasePreview() {
@@ -533,9 +639,9 @@
                 textEl.innerText = "Cuộc gọi từ Ngân hàng! Hãy xem xét lời đề nghị mua lại.";
                 subEl.innerText = "Đưa ra quyết định DEAL (Bán) hoặc NO DEAL (Tiếp tục).";
             } else if (gameState.phase === 'FINAL_SWAP') {
-                statusBadge.innerText = "Vòng Chung Kết";
-                textEl.innerText = "Chỉ còn lại đúng 2 chiếc cặp duy nhất trên sân khấu!";
-                subEl.innerText = "Bạn có muốn ĐỔI cặp cá nhân của mình lấy chiếc cặp cuối cùng không?";
+                statusBadge.innerText = "Vòng Áp Chót";
+                textEl.innerText = "Trên sân khấu chỉ còn lại đúng 2 chiếc cặp! Hãy mở chiếc cặp áp chót trước khi chốt chung cuộc.";
+                subEl.innerText = "Click chọn chiếc cặp cuối cùng trên sân khấu.";
             } else if (gameState.phase === 'GAME_OVER') {
                 statusBadge.innerText = "Trò Chơi Kết Thúc";
                 textEl.innerText = "Chương trình đã khép lại với phần thưởng cuối cùng.";
@@ -553,31 +659,56 @@
                 gameState.currentRound = 0;
                 gameState.casesOpenedThisRound = 0;
                 renderAll();
-            } else if (gameState.phase === 'OPENING_CASES') {
+            } else if (gameState.phase === 'OPENING_CASES' || gameState.phase === 'FINAL_SWAP') {
                 if (caseNum === gameState.userPersonalCase) {
                     alert("Đây là chiếc cặp cá nhân bạn đang giữ kín, không thể mở lúc này!");
                     return;
                 }
 
                 gameState.isLocked = true;
-                playSound('open');
+                const val = gameState.cases[caseNum];
+
+                playSound('open', val);
                 
                 gameState.openedCases.push(caseNum);
                 gameState.casesOpenedThisRound++;
 
-                const gridItems = document.getElementById('cases-grid').children;
-                if (gridItems[caseNum - 1]) {
-                    gridItems[caseNum - 1].classList.add('flipped');
-                }
-
-                const val = gameState.cases[caseNum];
+                renderCasesGrid();
                 
                 showPrizeRevealPopup(caseNum, val, () => {
+                    highlightedPrizeVal = val;
                     renderPrizesBoards();
+
+                    setTimeout(() => {
+                        highlightedPrizeVal = null;
+                        renderPrizesBoards();
+                    }, 2000);
+
                     gameState.isLocked = false;
 
+                    let unOpened = [];
+                    for (let i = 1; i <= 26; i++) {
+                        if (i !== gameState.userPersonalCase && !gameState.openedCases.includes(i)) {
+                            unOpened.push(i);
+                        }
+                    }
+
+                    if (unOpened.length === 0 && gameState.phase === 'FINAL_SWAP') {
+                        setTimeout(() => {
+                            triggerFinalPersonalCaseReveal();
+                        }, 400);
+                        return;
+                    }
+
+                    if (unOpened.length === 1 && gameState.phase !== 'FINAL_SWAP') {
+                        setTimeout(() => {
+                            triggerBankerOfferModal();
+                        }, 400);
+                        return;
+                    }
+
                     const quota = ROUND_QUOTAS[gameState.currentRound] || 1;
-                    if (gameState.casesOpenedThisRound >= quota) {
+                    if (gameState.casesOpenedThisRound >= quota && gameState.phase !== 'FINAL_SWAP') {
                         setTimeout(() => {
                             triggerBankerOfferModal();
                         }, 400);
@@ -618,6 +749,47 @@
             }, 2000);
         }
 
+        function triggerFinalPersonalCaseReveal() {
+            playSound('win');
+            gameState.phase = 'GAME_OVER';
+
+            const personalVal = gameState.cases[gameState.userPersonalCase];
+            const finalDisplayBox = document.getElementById('final-prize-display');
+            
+            if (gameState.hasAcceptedDealBefore) {
+                // NẾU ĐÃ CHỐT DEAL: Hiển thị chuẩn xác tiền thưởng từ giá trị đã chốt cố định
+                document.getElementById('gameover-title').innerText = "KẾT QUẢ CHUNG CUỘC";
+                document.getElementById('gameover-desc').innerText = `${gameState.playerName} đã chốt giá chào mua thành công với Ngân hàng!`;
+                
+                finalDisplayBox.style.display = 'block';
+                finalDisplayBox.className = 'text-3xl sm:text-4xl font-black text-emerald-400 mt-2 led-glow';
+                finalDisplayBox.innerText = formatMoney(gameState.acceptedDealAmount);
+
+                document.getElementById('user-original-reveal-desc').innerHTML = `
+                    <div class="pt-2 border-t border-slate-800">Giá trị thực tế trong chiếc cặp cá nhân <span class="text-amber-400 font-bold">[${gameState.userPersonalCase}]</span>: <span class="text-amber-400 font-bold">${formatMoney(personalVal)}</span></div>
+                `;
+            } else {
+                // NẾU CHƠI TỚI CÙNG: Nhận tiền trong cặp cá nhân
+                document.getElementById('gameover-title').innerText = `MỞ CẶP CÁ NHÂN [${gameState.userPersonalCase}]`;
+                document.getElementById('gameover-desc').innerText = `Tất cả các cặp trên sân khấu đã được mở. Đây là giá trị trong chiếc cặp cá nhân của bạn!`;
+                
+                finalDisplayBox.style.display = 'block';
+                finalDisplayBox.className = 'text-3xl sm:text-4xl font-black text-amber-400 mt-2 led-glow';
+                finalDisplayBox.innerText = formatMoney(personalVal);
+
+                document.getElementById('user-original-reveal-desc').innerHTML = `Chiếc cặp cá nhân số <span class="text-amber-400 font-bold">[${gameState.userPersonalCase}]</span> thuộc về bạn!`;
+            }
+
+            const modal = document.getElementById('gameover-modal');
+            const content = document.getElementById('gameover-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            renderAll();
+        }
+
         function triggerBankerOfferModal() {
             playSound('banker');
             gameState.phase = 'BANKER_OFFER';
@@ -652,11 +824,9 @@
 
             const buttonsGroup = document.getElementById('banker-buttons-group');
 
-            // Kiểm tra: Nếu trước đó đã từng chấp nhận deal rồi, thì các lần gọi sau NGAY LẬP TỨC chỉ hiển thị 2 lựa chọn mới
             if (gameState.hasAcceptedDealBefore) {
                 renderAcceptedDealButtons(buttonsGroup);
             } else {
-                // Mặc định hiện thị nút CHẤP NHẬN và KHÔNG CHẤP NHẬN
                 buttonsGroup.innerHTML = `
                     <button onclick="acceptBankerDeal()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl shadow-lg shadow-emerald-900/40 transition-all duration-300 transform active:scale-95 text-sm sm:text-base uppercase tracking-wider">
                         CHẤP NHẬN
@@ -676,7 +846,6 @@
             }, 50);
         }
 
-        // HÀM HIỂN THỊ 2 LỰA CHỌN SAU KHI ĐÃ CHẤP NHẬN DEAL
         function renderAcceptedDealButtons(container) {
             container.innerHTML = `
                 <div class="col-span-2 grid grid-cols-2 gap-4">
@@ -690,16 +859,14 @@
             `;
         }
 
-        // KHI BẤM CHẤP NHẬN DEAL LẦN ĐẦU
         function acceptBankerDeal() {
             playSound('win');
-            gameState.hasAcceptedDealBefore = true; // Đánh dấu đã chốt deal
-
+            gameState.hasAcceptedDealBefore = true;
+            gameState.acceptedDealAmount = gameState.currentBankerOffer; // LƯU CỐ ĐỊNH GIÁ TRỊ CHỐT DEAL TẠI ĐÂY
             const buttonsGroup = document.getElementById('banker-buttons-group');
-            renderAcceptedDealButtons(buttonsGroup); // Chuyển giao diện thành 2 lựa chọn đúng ý bạn
+            renderAcceptedDealButtons(buttonsGroup);
         }
 
-        // Lựa chọn 1: Tiếp tục mở cặp (chơi tiếp vòng tiếp theo theo format chương trình)
         function continueOpeningAfterDeal() {
             closeBankerModal();
             let unOpened = [];
@@ -711,7 +878,7 @@
 
             if (unOpened.length === 1) {
                 gameState.phase = 'FINAL_SWAP';
-                triggerFinalSwapStage(unOpened[0]);
+                renderInstructionBanner();
             } else {
                 gameState.currentRound++;
                 gameState.casesOpenedThisRound = 0;
@@ -720,28 +887,9 @@
             }
         }
 
-        // Lựa chọn 2: Mở ngay cặp đã chọn (Kết thúc trò chơi, lấy giá trị đã deal và hiển thị cặp cá nhân)
         function revealPersonalCaseNow() {
             closeBankerModal();
-            playSound('win');
-            gameState.phase = 'GAME_OVER';
-
-            const prize = gameState.currentBankerOffer;
-            const personalVal = gameState.cases[gameState.userPersonalCase];
-
-            document.getElementById('gameover-title').innerText = "KẾT QUẢ CHUNG CUỘC";
-            document.getElementById('gameover-desc').innerText = `${gameState.playerName} đã chốt giá chào mua thành công với Ngân hàng!`;
-            document.getElementById('final-prize-display').innerText = formatMoney(prize);
-            document.getElementById('user-original-reveal-desc').innerHTML = `Tiền thưởng chốt đơn: <span class="text-emerald-400 font-bold">${formatMoney(prize)}</span><br>Chiếc cặp cá nhân số <span class="text-amber-400 font-bold">[${gameState.userPersonalCase}]</span> của bạn thực chất chứa: <span class="text-rose-400 font-bold">${formatMoney(personalVal)}</span>`;
-
-            const modal = document.getElementById('gameover-modal');
-            const content = document.getElementById('gameover-modal-content');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 50);
-            renderAll();
+            triggerFinalPersonalCaseReveal();
         }
 
         function rejectBankerDeal() {
@@ -757,7 +905,7 @@
 
             if (unOpened.length === 1) {
                 gameState.phase = 'FINAL_SWAP';
-                triggerFinalSwapStage(unOpened[0]);
+                renderInstructionBanner();
             } else {
                 gameState.currentRound++;
                 gameState.casesOpenedThisRound = 0;
@@ -773,50 +921,6 @@
             setTimeout(() => {
                 document.getElementById('banker-modal').classList.add('hidden');
             }, 300);
-        }
-
-        function triggerFinalSwapStage(lastCaseNum) {
-            renderAll();
-            const textEl = document.getElementById('instruction-text');
-            const subEl = document.getElementById('sub-instruction');
-
-            textEl.innerHTML = `Trên sân khấu chỉ còn lại cặp cá nhân <span class="text-amber-400 font-bold">[${gameState.userPersonalCase}]</span> và cặp cuối cùng <span class="text-amber-400 font-bold">[${lastCaseNum}]</span>.`;
-            subEl.innerHTML = `
-                <div class="mt-2 flex justify-center space-x-3 transition-all duration-300">
-                    <button onclick="finishGameSession(false)" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl shadow-lg transition-all transform active:scale-95 text-xs">Giữ Cặp Cũ [${gameState.userPersonalCase}]</button>
-                    <button onclick="finishGameSession(true, ${lastCaseNum})" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-black rounded-xl shadow-lg transition-all transform active:scale-95 text-xs">Đổi Sang Cặp [${lastCaseNum}]</button>
-                </div>
-            `;
-        }
-
-        function finishGameSession(isSwap, lastCaseNum = null) {
-            playSound('win');
-            let chosenCase = gameState.userPersonalCase;
-            let swapDesc = "";
-
-            if (isSwap && lastCaseNum !== null) {
-                chosenCase = lastCaseNum;
-                swapDesc = ` Bạn đã đổi từ cặp [${gameState.userPersonalCase}] sang cặp [${lastCaseNum}].`;
-            } else {
-                swapDesc = ` Bạn giữ nguyên cặp cá nhân [${gameState.userPersonalCase}].`;
-            }
-
-            const prize = gameState.cases[chosenCase];
-            gameState.phase = 'GAME_OVER';
-
-            document.getElementById('gameover-title').innerText = "KẾT QUẢ CHUNG CUỘC";
-            document.getElementById('gameover-desc').innerText = `Hành trình Đi Tìm Ân Số của ${gameState.playerName} đã khép lại.${swapDesc}`;
-            document.getElementById('final-prize-display').innerText = formatMoney(prize);
-            document.getElementById('user-original-reveal-desc').innerText = `Chiếc cặp số [${chosenCase}] mang lại cho bạn phần thưởng chính thức!`;
-
-            const modal = document.getElementById('gameover-modal');
-            const content = document.getElementById('gameover-modal-content');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 50);
-            renderAll();
         }
 
         window.onload = function() {
