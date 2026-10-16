@@ -210,7 +210,7 @@
             <div id="blue-prizes" class="grid grid-cols-3 sm:grid-cols-4 lg:flex lg:flex-col gap-1"></div>
         </section>
 
-        <!-- CENTER STUDIO STAGE (26 BRIEFCASES - BỐ CỤC ĐẸP MẮT 5 HÀNG: 5 - 5 - 6 - 5 - 5 HOẶC 4 - 6 - 6 - 6 - 4) -->
+        <!-- CENTER STUDIO STAGE (26 BRIEFCASES) -->
         <section aria-label="Khu vực sân khấu chính" class="lg:col-span-6 flex flex-col items-center space-y-3 order-4 lg:order-3">
             <div class="w-full glass-panel rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-2xl">
                 <div class="text-center mb-2 sm:mb-3">
@@ -458,7 +458,22 @@
         }
 
         function resetGameData() {
-            let shuffled = [...AMOUNTS].sort(() => Math.random() - 0.5);
+            // NÂNG CẤP ĐỘ NGẪU NHIÊN: Sử dụng thuật toán Fisher-Yates shuffle chạy nhiều vòng lặp liên tiếp 
+            // để đảm bảo tỷ lệ xáo trộn giá trị các chiếc cặp đạt độ hỗn loạn và ngẫu nhiên tuyệt đối, loại bỏ hoàn toàn độ lệch của hàm sort cũ.
+            let shuffled = [...AMOUNTS];
+            for (let round = 0; round < 3; round++) {
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+            }
+            // Thêm một lượt hoán đổi ngẫu nhiên phụ để tăng độ phân tán giá trị lớn/nhỏ
+            for (let k = 0; k < 10; k++) {
+                const idx1 = Math.floor(Math.random() * shuffled.length);
+                const idx2 = Math.floor(Math.random() * shuffled.length);
+                [shuffled[idx1], shuffled[idx2]] = [shuffled[idx2], shuffled[idx1]];
+            }
+
             gameState.cases = {};
             for (let i = 1; i <= 26; i++) {
                 gameState.cases[i] = shuffled[i - 1];
@@ -566,14 +581,11 @@
             const grid = document.getElementById('cases-grid');
             grid.innerHTML = '';
 
-            // SẮP XẾP LẠI BỐ CỤC ĐẸP MẮT (Mỗi hàng 5-6 cặp theo hình vòng cung thuôn gọn)
-            // Tổng 26 cặp phân bổ thành 5 hàng: [5, 5, 6, 5, 5] hoặc [4, 6, 6, 6, 4]
             const rowLayout = [5, 5, 6, 5, 5];
             let caseNumber = 1;
 
             rowLayout.forEach((count) => {
                 const rowDiv = document.createElement('div');
-                // Sử dụng flex với justify-center để các hàng ít cặp hơn (như 5 cặp) tự động căn giữa cân đối tuyệt đối
                 rowDiv.className = 'flex justify-center gap-2 sm:gap-3.5 w-full';
 
                 for (let j = 0; j < count; j++) {
@@ -583,7 +595,6 @@
                     const isUserCase = gameState.userPersonalCase === i;
 
                     const wrapper = document.createElement('div');
-                    // Tối ưu kích thước ô vuông cho vừa màn hình điện thoại & PC
                     wrapper.className = `briefcase w-12 h-12 sm:w-16 sm:h-16 aspect-square rounded-xl sm:rounded-2xl relative ${isOpened ? 'opened' : ''} ${isUserCase ? 'user-personal' : ''}`;
                     
                     let innerHtml = `
